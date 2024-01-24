@@ -13,6 +13,21 @@ router.get("/", async (req, res) => {
     }
 });
 
+// Ruta para obtener un libro por su ID
+router.get('/:id', async (req, res) => {
+    try {
+        const libro = await Libro.findById(req.params.id);
+
+        if (!libro) {
+            return res.status(404).json({ error: 'Libro no encontrado' });
+        }
+
+        res.json(libro);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener el libro' });
+    }
+});
+
 // Ruta para crear un nuevo Libro
 router.post("/", async (req, res) => {
     try {
@@ -27,11 +42,11 @@ router.post("/", async (req, res) => {
 // Ruta para actualizar un Libro existente
 router.put("/:id", async (req, res) => {
     try {
-        const Libro = await Libro.findByIdAndUpdate(req.params.id, req.body,
+        const libroActualizado = await Libro.findByIdAndUpdate(req.params.id, req.body,
         {
             new: true,
         });
-        res.json(Libro);
+        res.json(libroActualizado);
     } catch (error) {
         res.status(500).json({ error: "Error al actualizar el Libro" });
     }
